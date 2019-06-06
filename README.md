@@ -1,5 +1,5 @@
 # TextRenderer
-.NET Desktop app for rendering images with chars
+.NET Desktop app for rendering images with text characters.
 ## Before:
 ![Demo Animation](/img/SourceImage.jpg?raw=true)  
 ## After:
