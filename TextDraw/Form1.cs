@@ -18,25 +18,7 @@ namespace TextDraw
         public Form1()
         {
             InitializeComponent();
-        }
-
-        private void BtnRunPython_Click(object sender, EventArgs e)
-        {
-            string pyPath = @"C:\Users\Александр\AppData\Local\Programs\Python\Python37\python.exe";
-            string pyScript = @"C:\Users\Александр\source\Python\recursion_tree-master\RecursionTree\main.py";
-
-            ExecutePython(pyPath, pyScript);
-        }
-
-        private void ExecutePython (string pythonPath, string scriptName)
-        {
-            Process p = new Process();
-            p.StartInfo.FileName = pythonPath;
-            p.StartInfo.RedirectStandardOutput = true;
-            p.StartInfo.UseShellExecute = false;
-            p.StartInfo.Arguments = scriptName;                    
-            p.Start();
-        }
+        }                      
 
         private void RenderSVG (string filePath)
         {
@@ -44,10 +26,10 @@ namespace TextDraw
 
             PictureSVGRender.Image = svgDoc.Draw();
         }
+
         private void BtnDrawSVG_Click(object sender, EventArgs e)
         {
             string svgPath = @"C:\Users\Александр\source\Python\recursion_tree-master\RecursionTree\random_tree_001.svg";
-
             RenderSVG(svgPath);
         }
 
@@ -109,6 +91,7 @@ namespace TextDraw
         
     }
 }
+
 //randomNum = rndNum.Next(0, 255);
 //byte red = Convert.ToByte(randomNum);
 //randomNum = rndNum.Next(0, 255);

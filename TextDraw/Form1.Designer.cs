@@ -69,8 +69,7 @@
             this.BtnRunPython.TabIndex = 0;
             this.BtnRunPython.Text = "RunPython";
             this.BtnRunPython.UseVisualStyleBackColor = true;
-            this.BtnRunPython.Visible = false;
-            this.BtnRunPython.Click += new System.EventHandler(this.BtnRunPython_Click);
+            this.BtnRunPython.Visible = false;            
             // 
             // BtnDrawSVG
             // 
