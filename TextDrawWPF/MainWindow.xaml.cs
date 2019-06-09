@@ -19,19 +19,18 @@ using System.Globalization;
 
 namespace ColortexWPF
 {
-   
-    /// <summary>
-    /// Interaction logic for MainWindow.xaml
-    /// </summary>
+    public delegate DrawingContext DrawDelegate(DrawingContext drawingContext, BitmapSource image, string TextToDraw);
+    
     public partial class MainWindow : Window
     {      
 
         List<String> FileExtensions = new List<string>();
-
+        public DrawDelegate DrawWithSelectedAlgorithms;
+        
         public MainWindow()
         {
             InitializeComponent();
-            
+                        
             watchFiles();
 
             FileExtensions.Add("*.png");
@@ -40,9 +39,12 @@ namespace ColortexWPF
             FillListBox(listSource, @"prepare", FileExtensions);
             FillListBox(listProcessed, @"output", FileExtensions);
 
+            if (listSource.Items[0] != null)
+                listSource.SelectedIndex = 0;
+
             pythonPath.Text = LoadConfig(pythonPath)[0];
         }
-
+        
         private void watchFiles()
         {
             FileSystemWatcher watcherInput = new FileSystemWatcher();
@@ -61,7 +63,7 @@ namespace ColortexWPF
             watcherOutput.Changed += new FileSystemEventHandler(OnNewFilesFound);
             watcherOutput.EnableRaisingEvents = true;
         }
-
+        
         public void OnNewFilesFound(object source, FileSystemEventArgs e)
         {
             Dispatcher.BeginInvoke(new Action(() => refreshList()));
@@ -116,7 +118,11 @@ namespace ColortexWPF
             if (checkBoxPython.IsChecked == true)
                 PythonAlgorithm(@"main.py");
             else
-                CsharpAlgorithm1();
+                if (DrawWithSelectedAlgorithms != null)
+                    CsharpAlgorithms();
+                else
+                    MessageBox.Show("Please select drawing algorithm");
+           
         }
 
         private void PythonAlgorithm(string pythonScript)
@@ -147,84 +153,7 @@ namespace ColortexWPF
             }
         }
 
-        private void CsharpAlgorithm1()
-        {                        
-            BitmapImage bitImage = new BitmapImage();
-            bitImage.BeginInit();
-            bitImage.CacheOption = BitmapCacheOption.OnLoad;
-            bitImage.UriSource = new Uri(@"prepare\" + listSource.SelectedItem.ToString(), UriKind.Relative);
-            bitImage.EndInit();            
-
-            WriteableBitmap writeableBmp = new WriteableBitmap(bitImage);
-
-            int width = 300;
-            int height = 300;
-                       
-            WriteableBitmap bitmap = new WriteableBitmap(width, height, 96, 96, PixelFormats.Bgra32, null);
-
-            // Create an array of pixels to contain pixel color values
-            uint[] pixels = new uint[width * height];
-
-            int red;
-            int green;
-            int blue;
-            int alpha;
-
-            for (int x = 0; x < width; ++x)
-            {
-                for (int y = 0; y < height; ++y)
-                {
-                    int i = width * y + x;
-
-                    red = 0;
-                    green = 255 * y / height;
-                    blue = 255 * (width - x) / width;
-                    alpha = 255;
-                    pixels[i] = (uint)((blue << 24) + (green << 16) + (red << 8) + alpha);
-                    
-                }
-            }
-            
-            bitmap.WritePixels(new Int32Rect(0, 0, 300, 300), pixels, width * 4, 0);
-                       
-            var visual = new DrawingVisual();
-            
-            Point p1 = new Point(0, 0);
-
-            using (var r = visual.RenderOpen())
-            {
-                r.DrawImage(bitImage, new Rect(0, 0, bitImage.PixelWidth, bitImage.PixelHeight));
-
-                for (int i = 0; i < bitImage.PixelWidth; i += 25)
-                    for (int j = 0; j < bitImage.PixelHeight; j += 25)
-                    {
-                        GlyphRun gr = new GlyphRun(
-                        new GlyphTypeface(new Uri(@"C:\Windows\Fonts\BKANT.TTF")),
-                        0,       // Bi-directional nesting level
-                        false,   // isSideways
-                        25,      // pt size
-                        new ushort[] { 23 },   // glyphIndices
-                        new Point(i, j),           // baselineOrigin
-                        new double[] { 80.0 },  // advanceWidths
-                        null,    // glyphOffsets
-                        null,    // characters
-                        null,    // deviceFontName
-                        null,    // clusterMap
-                        null,    // caretStops
-                        null);   // xmlLanguage
-                                               
-                        SolidColorBrush textcolorBrush = new SolidColorBrush(GetPixel(bitImage, i, j));
-                        r.DrawGlyphRun(textcolorBrush, gr);
-                    }
-            }
-
-            var target = new RenderTargetBitmap(bitImage.PixelWidth, bitImage.PixelHeight, bitImage.DpiX, bitImage.DpiY, PixelFormats.Pbgra32);
-
-            target.Render(visual);  
-            imageRenderer.Source = target;            
-        }
-
-        private void CsharpAlgorithm2()
+        private void CsharpAlgorithms()
         {
             BitmapImage bitImage = new BitmapImage();
             bitImage.BeginInit();
@@ -233,15 +162,17 @@ namespace ColortexWPF
             bitImage.EndInit();
 
             var bmptmp = BitmapSource.Create(1, 1, 96, 96, PixelFormats.Bgr24, null, new byte[3] { 0, 0, 0 }, 3);
-            string CharsToRender = "!?@#$%ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-            
-            BitmapSource bitmapOutput = RenderChars(bitImage, CharsToRender, true);
+           
+            BitmapSource bitmapOutput;
+
+            bitmapOutput = ProcessImage(bitImage, false);           
+
             imageRenderer.Source = bitmapOutput;
 
             if (listSource.SelectedItem != null)
             {
                 var encoder = new JpegBitmapEncoder(); // Or any other, e.g. PngBitmapEncoder for PNG.
-                                
+
                 encoder.Frames.Add(BitmapFrame.Create(bitmapOutput));
                 encoder.QualityLevel = 100; // Set quality level 1-100.
 
@@ -249,13 +180,40 @@ namespace ColortexWPF
                 {
                     encoder.Save(stream);
                 }
-            }
+            }                        
         }
-
-        public BitmapSource RenderChars(BitmapSource image, string watermarkText, bool DrawOnPicture)
+                
+        public DrawingContext RenderGlyphsAlgorithm(DrawingContext drawingContext, BitmapSource image, string TextToDraw)
         {
             Random rndChar = new Random();
-            
+
+            for (int i = 0; i < image.PixelWidth; i += 28)
+                for (int j = 0; j < image.PixelHeight; j += 28)
+                {
+                    GlyphRun gr = new GlyphRun(
+                    new GlyphTypeface(new Uri(@"C:\Windows\Fonts\OldEgyptGlyphs.TTF")),
+                    0,       
+                    false,   
+                    25,      
+                    new ushort[] { (ushort)rndChar.Next(0, 200) }, 
+                    new Point(i, j),          
+                    new double[] { 50.0 },
+                    null,    
+                    null,    
+                    null,    
+                    null,    
+                    null,    
+                    null);   
+
+                    SolidColorBrush textcolorBrush = new SolidColorBrush(GetPixel2(image, i, j));
+                    drawingContext.DrawGlyphRun(textcolorBrush, gr);
+                }
+
+            return drawingContext;
+        }
+
+        public BitmapSource ProcessImage(BitmapSource image, bool DrawOnPicture)
+        {
             var visual = new DrawingVisual();
 
             using (var drawingContext = visual.RenderOpen())
@@ -268,25 +226,12 @@ namespace ColortexWPF
                     var imgcreated = new TransformedBitmap(bmptmp, new ScaleTransform(image.PixelWidth, image.PixelHeight));
                     drawingContext.DrawImage(bmptmp, new Rect(0, 0, image.PixelWidth, image.PixelHeight));
                 }
-                       
-                for (int x = 0; x < image.PixelWidth; x += 15)
-                {
-                    for (int y = 0; y < image.PixelHeight; y += 15)
-                    {
-                        var text = new FormattedText(
-                        watermarkText[rndChar.Next(0, watermarkText.Length)].ToString(),
-                        CultureInfo.InvariantCulture,
-                        FlowDirection.LeftToRight,
-                        new Typeface("Consolas"),
-                        15,
-                        Brushes.White);
 
-                        text.SetForegroundBrush(new SolidColorBrush(GetPixel2(image, x, y)));
-                        drawingContext.DrawText(text, new Point(x, y));
-                    }
-                }
+                string CharsToRender = "!?@#$%ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+                                
+                DrawWithSelectedAlgorithms(drawingContext, image, CharsToRender);                
             }
-
+            
             Rect bounds = VisualTreeHelper.GetDescendantBounds(visual);
 
             var bitmap = new RenderTargetBitmap(image.PixelWidth, image.PixelHeight, 96, 96, PixelFormats.Default);
@@ -294,6 +239,30 @@ namespace ColortexWPF
             bitmap.Render(visual);
 
             return bitmap;
+        }
+
+        public DrawingContext RenderCharsAlgorithm(DrawingContext drawingContext, BitmapSource image, string TextToDraw)
+        {
+            Random rndChar = new Random();
+
+            for (int x = 0; x < image.PixelWidth; x += 20)
+            {
+                for (int y = 0; y < image.PixelHeight; y += 20)
+                {
+                    var text = new FormattedText(
+                    TextToDraw[rndChar.Next(0, TextToDraw.Length)].ToString(),
+                    CultureInfo.InvariantCulture,
+                    FlowDirection.LeftToRight,
+                    new Typeface("Consolas"),
+                    24,
+                    Brushes.White);
+
+                    text.SetForegroundBrush(new SolidColorBrush(GetPixel2(image, x, y)));
+                    drawingContext.DrawText(text, new Point(x, y));
+                }
+            }
+
+            return drawingContext;
         }
         
         public BitmapImage ConvertWriteableBitmapToBitmapImage(WriteableBitmap wbm)
@@ -334,7 +303,6 @@ namespace ColortexWPF
             Color color;
             var bytesPerPixel = (bitmap.Format.BitsPerPixel + 7) / 8;
             var bytes = new byte[bytesPerPixel];
-
             var rect = new Int32Rect(x, y, 1, 1);
 
             bitmap.CopyPixels(rect, bytes, bytesPerPixel, 0);
@@ -346,8 +314,7 @@ namespace ColortexWPF
             else if (bitmap.Format == PixelFormats.Bgr32)
             {
                 color = Color.FromRgb(bytes[2], bytes[1], bytes[0]);
-            }
-            // handle other required formats
+            }            
             else
             {
                 color = Colors.Black;
@@ -374,15 +341,13 @@ namespace ColortexWPF
             var group = new DrawingGroup();
             RenderOptions.SetBitmapScalingMode(group, BitmapScalingMode.HighQuality);
             group.Children.Add(new ImageDrawing(source, rect));
-
             var drawingVisual = new DrawingVisual();
+
             using (var drawingContext = drawingVisual.RenderOpen())
                 drawingContext.DrawDrawing(group);
 
-            var resizedImage = new RenderTargetBitmap(
-                width, height,         // Resized dimensions
-                96, 96,                // Default DPI values
-                PixelFormats.Default); // Default pixel format
+            var resizedImage = new RenderTargetBitmap(width, height, 96, 96, PixelFormats.Default);
+
             resizedImage.Render(drawingVisual);
 
             return BitmapFrame.Create(resizedImage);
@@ -399,6 +364,7 @@ namespace ColortexWPF
                 image.EndInit();
                 imageRenderer.Source = image;
             }
+
             listProcessed.UnselectAll();
         }
 
@@ -413,6 +379,7 @@ namespace ColortexWPF
                 image.EndInit();
                 imageRenderer.Source = image;
             }
+
             listSource.UnselectAll();
         }
 
@@ -421,6 +388,28 @@ namespace ColortexWPF
             BitmapFrame bitmap = CreateResizedImage(imageRenderer.Source, (int)(imageRenderer.Source.Width / 1.2), (int)(imageRenderer.Source.Height / 1.2), 0);
                         
             imageRenderer.Source = bitmap;
+        }
+
+        private void CheckBoxDrawChars_Checked(object sender, RoutedEventArgs e)
+        {
+            DrawWithSelectedAlgorithms += RenderCharsAlgorithm;
+        }
+
+        private void CheckBoxDrawGlyphs_Checked(object sender, RoutedEventArgs e)
+        {
+            DrawWithSelectedAlgorithms += RenderGlyphsAlgorithm;
+        }
+
+        private void CheckBoxPython_Checked(object sender, RoutedEventArgs e)
+        {
+            checkBoxDrawChars.IsEnabled = false;
+            checkBoxDrawGlyphs.IsEnabled = false;
+        }
+
+        private void CheckBoxPython_Unchecked(object sender, RoutedEventArgs e)
+        {
+            checkBoxDrawChars.IsEnabled = true;
+            checkBoxDrawGlyphs.IsEnabled = true;
         }
     }
 }
