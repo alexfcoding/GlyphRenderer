@@ -191,14 +191,14 @@ namespace GlyphRenderer
         {
             Random rndChar = new Random();
 
-            for (int i = 0; i < image.PixelWidth; i += 28)
-                for (int j = 0; j < image.PixelHeight; j += 28)
+            for (int i = 0; i < image.PixelWidth; i += 50)
+                for (int j = 0; j < image.PixelHeight; j += 50)
                 {
                     GlyphRun gr = new GlyphRun(
                     new GlyphTypeface(new Uri(@"C:\Windows\Fonts\OldEgyptGlyphs.TTF")),
                     0,       
                     false,   
-                    24,      
+                    40,      
                     new ushort[] { (ushort)rndChar.Next(0, 200) }, 
                     new Point(i, j),          
                     new double[] { 50.0 },
