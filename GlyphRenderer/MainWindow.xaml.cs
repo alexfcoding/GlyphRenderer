@@ -164,8 +164,10 @@ namespace GlyphRenderer
             var bmptmp = BitmapSource.Create(1, 1, 96, 96, PixelFormats.Bgr24, null, new byte[3] { 0, 0, 0 }, 3);
            
             BitmapSource bitmapOutput;
-
-            bitmapOutput = ProcessImage(bitImage, false);           
+            if (checkBoxDrawOnImage.IsChecked == true)
+                bitmapOutput = ProcessImage(bitImage, true);
+            else
+                bitmapOutput = ProcessImage(bitImage, false);
 
             imageRenderer.Source = bitmapOutput;
 
@@ -176,7 +178,9 @@ namespace GlyphRenderer
                 encoder.Frames.Add(BitmapFrame.Create(bitmapOutput));
                 encoder.QualityLevel = 100; // Set quality level 1-100.
 
-                using (var stream = new FileStream(@"output/" + listSource.SelectedItem.ToString(), FileMode.Create))
+                Random rndFileName = new Random();
+
+                using (var stream = new FileStream(@"output/" + rndFileName.Next(1, int.MaxValue).ToString() + "_" + listSource.SelectedItem.ToString(), FileMode.Create))
                 {
                     encoder.Save(stream);
                 }
@@ -194,7 +198,7 @@ namespace GlyphRenderer
                     new GlyphTypeface(new Uri(@"C:\Windows\Fonts\OldEgyptGlyphs.TTF")),
                     0,       
                     false,   
-                    25,      
+                    24,      
                     new ushort[] { (ushort)rndChar.Next(0, 200) }, 
                     new Point(i, j),          
                     new double[] { 50.0 },
@@ -245,16 +249,16 @@ namespace GlyphRenderer
         {
             Random rndChar = new Random();
 
-            for (int x = 0; x < image.PixelWidth; x += 20)
+            for (int x = 0; x < image.PixelWidth; x += 9)
             {
-                for (int y = 0; y < image.PixelHeight; y += 20)
+                for (int y = 0; y < image.PixelHeight; y += 10)
                 {
                     var text = new FormattedText(
                     TextToDraw[rndChar.Next(0, TextToDraw.Length)].ToString(),
                     CultureInfo.InvariantCulture,
                     FlowDirection.LeftToRight,
                     new Typeface("Consolas"),
-                    24,
+                    12,
                     Brushes.White);
 
                     text.SetForegroundBrush(new SolidColorBrush(GetPixel2(image, x, y)));

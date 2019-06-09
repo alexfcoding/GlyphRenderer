@@ -49,6 +49,6 @@
         <CheckBox x:Name="checkBoxPython" Content="Use Python algorithms" HorizontalAlignment="Left" Margin="11,666,0,0" VerticalAlignment="Top" Checked="CheckBoxPython_Checked" Unchecked="CheckBoxPython_Unchecked"/>
         <CheckBox x:Name="checkBoxDrawChars" Content="Render chars" HorizontalAlignment="Left" Margin="10,725,0,0" VerticalAlignment="Top" IsThreeState="True" Checked="CheckBoxDrawChars_Checked"/>
         <CheckBox x:Name="checkBoxDrawGlyphs" Content="Render glyphs" HorizontalAlignment="Left" Margin="10,745,0,0" VerticalAlignment="Top" IsThreeState="True" Checked="CheckBoxDrawGlyphs_Checked"/>
-        <CheckBox x:Name="checkBoxDrawOnImage" Content="Draw on image" HorizontalAlignment="Left" Margin="10,705,0,0" VerticalAlignment="Top" IsThreeState="True" Checked="CheckBoxDrawChars_Checked"/>
+        <CheckBox x:Name="checkBoxDrawOnImage" Content="Draw on image" HorizontalAlignment="Left" Margin="10,705,0,0" VerticalAlignment="Top" IsThreeState="True"/>
     </Grid>
 </Window>
