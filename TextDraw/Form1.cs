@@ -41,7 +41,7 @@ namespace TextDraw
 
         private void DrawTextOnPic(Image Picture, Stopwatch watch)
         {
-            char[] charOut = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789".ToCharArray();
+            char[] charOut = "!?@#$%ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789".ToCharArray();
 
             Bitmap sourcePic = new Bitmap(Picture);
             
@@ -54,11 +54,11 @@ namespace TextDraw
             
             using (Graphics graphics = Graphics.FromImage(Picture))
             {
-                using (Font font = new Font("Consolas", 15))
+                using (Font font = new Font("Consolas", 24))
                 {
-                    for (int i = 0; i < Picture.Width; i += 12)
+                    for (int i = 0; i < Picture.Width; i += 24)
                     {
-                        for (int j = 0; j < Picture.Height; j += 12)
+                        for (int j = 0; j < Picture.Height; j += 24)
                         {
                             int randomCharIndex = rndNum.Next(0, charOut.Length);
 
