@@ -9,14 +9,14 @@
 		Title="GlyphRenderer" Width="1574.206" Height="902.746" Background="White">
     <Grid x:Name="Grid">
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="63*"/>
-            <ColumnDefinition Width="460*"/>
+            <ColumnDefinition/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="687*"/>
             <RowDefinition Height="4*"/>
         </Grid.RowDefinitions>
-        <Image x:Name="imageRenderer" HorizontalAlignment="Left" Height="754" VerticalAlignment="Top" Width="1279" Margin="57.953,56,0,0" ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Auto" RenderTransformOrigin="0.5,0.5" Grid.Column="1">
+        <GroupBox Header="Settings" HorizontalAlignment="Left" Height="93" Margin="247,708,0,0" VerticalAlignment="Top" Width="1279"/>
+        <Image x:Name="imageRenderer" HorizontalAlignment="Left" Height="659" VerticalAlignment="Top" Width="1279" Margin="247,35,0,0" ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Auto" RenderTransformOrigin="0.5,0.5">
             <Image.RenderTransform>
                 <TransformGroup>
                     <ScaleTransform ScaleY="1" ScaleX="1"/>
@@ -26,15 +26,18 @@
                 </TransformGroup>
             </Image.RenderTransform>
         </Image>
-        <ListBox x:Name="listProcessed" HorizontalAlignment="Left" Height="293" Margin="11,343,0,0" VerticalAlignment="Top" Width="209" SelectionChanged="ListProcessed_SelectionChanged" FontFamily="Consolas" Grid.ColumnSpan="2"/>
-        <ListBox x:Name="listSource" HorizontalAlignment="Left" Height="295" Margin="11,35,0,0" VerticalAlignment="Top" Width="209" SelectionChanged="ListSource_SelectionChanged" FontFamily="Consolas" Grid.ColumnSpan="2"/>
-        <Button x:Name="btnConvert" Content="Convert selected" HorizontalAlignment="Left" Margin="11,815,0,0" VerticalAlignment="Top" Width="209" FontFamily="Consolas" Click="BtnConvert_Click" Height="30" BorderBrush="#FF009BFF" Foreground="#FF009BFF" Grid.ColumnSpan="2"/>
-        <Button Content="Downsize" HorizontalAlignment="Left" Margin="11,780,0,0" VerticalAlignment="Top" Width="209" Click="Button_Click" Height="30" Grid.ColumnSpan="2"/>
-        <TextBox x:Name="pythonPath" HorizontalAlignment="Left" Height="17" Margin="139.953,28,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="449" Text="C:\Users\Александр\AppData\Local\Programs\Python\Python37-32\python.exe" FontSize="10" TextDecorations="{x:Null}" Grid.Column="1"/>
-        <Label Content="Python path:" HorizontalAlignment="Left" Margin="57.953,22,0,0" VerticalAlignment="Top" Height="26" Width="77" Grid.Column="1"/>
-        <Slider x:Name="scaleImageSlider" HorizontalAlignment="Left" Height="33" Margin="57.953,815,0,0" VerticalAlignment="Top" Width="1279" Maximum="100" TickPlacement="Both" Background="{x:Null}" Value="50" RenderTransformOrigin="0.482,-1.846" Grid.Column="1"/>
+        <Slider x:Name="sliderFontSize" HorizontalAlignment="Left" Margin="578,742,0,0" VerticalAlignment="Top" Width="196" Maximum="50" Value="15" Minimum="1"/>
 
-        <StackPanel VerticalAlignment="Top" Grid.ColumnSpan="2" Margin="0,0,-0.429,0">
+
+        <ListBox x:Name="listProcessed" HorizontalAlignment="Left" Height="358" Margin="11,411,0,0" VerticalAlignment="Top" Width="209" SelectionChanged="ListProcessed_SelectionChanged" FontFamily="Consolas"/>
+        <ListBox x:Name="listSource" HorizontalAlignment="Left" Height="360" Margin="11,35,0,0" VerticalAlignment="Top" Width="209" SelectionChanged="ListSource_SelectionChanged" FontFamily="Consolas"/>
+        <Button x:Name="btnConvert" Content="Convert selected" HorizontalAlignment="Left" Margin="11,815,0,0" VerticalAlignment="Top" Width="209" FontFamily="Consolas" Click="BtnConvert_Click" Height="30" BorderBrush="#FF009BFF" Foreground="#FF009BFF"/>
+        <Button Content="Downsize" HorizontalAlignment="Left" Margin="11,780,0,0" VerticalAlignment="Top" Width="209" Click="Button_Click" Height="30"/>
+        <TextBox x:Name="pythonPath" HorizontalAlignment="Left" Height="17" Margin="875,766,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="449" Text="C:\Users\Александр\AppData\Local\Programs\Python\Python37-32\python.exe" FontSize="10" TextDecorations="{x:Null}"/>
+        <Label Content="Python path:" HorizontalAlignment="Left" Margin="792,760,0,0" VerticalAlignment="Top" Height="26" Width="77"/>
+        <Slider x:Name="scaleImageSlider" HorizontalAlignment="Left" Height="33" Margin="247,815,0,0" VerticalAlignment="Top" Width="1279" Maximum="100" TickPlacement="Both" Background="{x:Null}" Value="50" RenderTransformOrigin="0.482,-1.846"/>
+
+        <StackPanel VerticalAlignment="Top" Margin="0,0,-0.429,0">
             <Menu Width="Auto" Height="20">
                 <MenuItem Header="_File">
                     <MenuItem x:Name="AppExit" Header="Exit" HorizontalAlignment="Left" Width="140"/>
@@ -47,9 +50,11 @@
                 </MenuItem>
             </Menu>
         </StackPanel>
-        <CheckBox x:Name="checkBoxPython" Content="Use Python algorithms" HorizontalAlignment="Left" Margin="11,666,0,0" VerticalAlignment="Top" Checked="CheckBoxPython_Checked" Unchecked="CheckBoxPython_Unchecked"/>
-        <CheckBox x:Name="checkBoxDrawChars" Content="Render chars" HorizontalAlignment="Left" Margin="10,725,0,0" VerticalAlignment="Top" IsThreeState="True" Checked="CheckBoxDrawChars_Checked"/>
-        <CheckBox x:Name="checkBoxDrawGlyphs" Content="Render glyphs" HorizontalAlignment="Left" Margin="10,745,0,0" VerticalAlignment="Top" IsThreeState="True" Checked="CheckBoxDrawGlyphs_Checked"/>
-        <CheckBox x:Name="checkBoxDrawOnImage" Content="Draw on image" HorizontalAlignment="Left" Margin="10,705,0,0" VerticalAlignment="Top" IsThreeState="True"/>
+        <CheckBox x:Name="checkBoxPython" Content="Use Python algorithms" HorizontalAlignment="Left" Margin="260,742,0,0" VerticalAlignment="Top" Checked="CheckBoxPython_Checked" Unchecked="CheckBoxPython_Unchecked" FontWeight="Bold"/>
+        <CheckBox x:Name="checkBoxDrawChars" Content="Render chars" HorizontalAlignment="Left" Margin="429,742,0,0" VerticalAlignment="Top" IsThreeState="True" Checked="CheckBoxDrawChars_Checked"/>
+        <CheckBox x:Name="checkBoxDrawGlyphs" Content="Render glyphs" HorizontalAlignment="Left" Margin="429,768,0,0" VerticalAlignment="Top" IsThreeState="True" Checked="CheckBoxDrawGlyphs_Checked"/>
+        <CheckBox x:Name="checkBoxDrawOnImage" Content="Draw on image" HorizontalAlignment="Left" Margin="260,768,0,0" VerticalAlignment="Top" IsThreeState="True"/>
+        <Slider x:Name="sliderFontResolution" HorizontalAlignment="Left" Margin="578,768,0,0" VerticalAlignment="Top" Width="196" Minimum="1" Maximum="50" Value="15"/>
+
     </Grid>
 </Window>
