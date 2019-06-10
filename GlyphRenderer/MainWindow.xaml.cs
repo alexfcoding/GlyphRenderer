@@ -172,18 +172,7 @@ namespace GlyphRenderer
 
             imageRenderer.Source = bitmapOutput;
 
-            var encoder = new JpegBitmapEncoder(); // Or any other, e.g. PngBitmapEncoder for PNG.
-
-            encoder.Frames.Add(BitmapFrame.Create(bitmapOutput));
-            encoder.QualityLevel = 100; // Set quality level 1-100.
-
-            Random rndFileName = new Random();
-
-            using (var stream = new FileStream(@"output/" + rndFileName.Next(1, int.MaxValue).ToString() + "_" + globalSelector, FileMode.Create))
-            {
-                encoder.Save(stream);
-            }
-                                    
+            ExportFile(bitmapOutput);
         }
                 
         public DrawingContext RenderGlyphsAlgorithm(DrawingContext drawingContext, BitmapSource image, string TextToDraw)
@@ -268,6 +257,21 @@ namespace GlyphRenderer
             }
 
             return drawingContext;
+        }
+
+        public void ExportFile (BitmapSource imageToExport)
+        {
+            var encoder = new JpegBitmapEncoder(); // Or any other, e.g. PngBitmapEncoder for PNG.
+
+            encoder.Frames.Add(BitmapFrame.Create(imageToExport));
+            encoder.QualityLevel = 100; // Set quality level 1-100.
+
+            Random rndFileName = new Random();
+
+            using (var stream = new FileStream(@"output/" + rndFileName.Next(1, int.MaxValue).ToString() + "_" + globalSelector, FileMode.Create))
+            {
+                encoder.Save(stream);
+            }
         }
         
         public BitmapImage ConvertWriteableBitmapToBitmapImage(WriteableBitmap wbm)
