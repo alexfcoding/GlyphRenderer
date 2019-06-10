@@ -22,7 +22,8 @@ namespace GlyphRenderer
     public delegate DrawingContext DrawDelegate(DrawingContext drawingContext, BitmapSource image, string TextToDraw);
     
     public partial class MainWindow : Window
-    {      
+    {
+        string globalSelector;
 
         List<String> FileExtensions = new List<string>();
         public DrawDelegate DrawWithSelectedAlgorithms;
@@ -122,7 +123,6 @@ namespace GlyphRenderer
                     CsharpAlgorithms();
                 else
                     MessageBox.Show("Please select drawing algorithm");
-           
         }
 
         private void PythonAlgorithm(string pythonScript)
@@ -158,7 +158,8 @@ namespace GlyphRenderer
             BitmapImage bitImage = new BitmapImage();
             bitImage.BeginInit();
             bitImage.CacheOption = BitmapCacheOption.OnLoad;
-            bitImage.UriSource = new Uri(@"prepare\" + listSource.SelectedItem.ToString(), UriKind.Relative);
+               
+            bitImage.UriSource = new Uri(@"prepare\" + globalSelector, UriKind.Relative);
             bitImage.EndInit();
 
             var bmptmp = BitmapSource.Create(1, 1, 96, 96, PixelFormats.Bgr24, null, new byte[3] { 0, 0, 0 }, 3);
@@ -171,20 +172,18 @@ namespace GlyphRenderer
 
             imageRenderer.Source = bitmapOutput;
 
-            if (listSource.SelectedItem != null)
+            var encoder = new JpegBitmapEncoder(); // Or any other, e.g. PngBitmapEncoder for PNG.
+
+            encoder.Frames.Add(BitmapFrame.Create(bitmapOutput));
+            encoder.QualityLevel = 100; // Set quality level 1-100.
+
+            Random rndFileName = new Random();
+
+            using (var stream = new FileStream(@"output/" + rndFileName.Next(1, int.MaxValue).ToString() + "_" + globalSelector, FileMode.Create))
             {
-                var encoder = new JpegBitmapEncoder(); // Or any other, e.g. PngBitmapEncoder for PNG.
-
-                encoder.Frames.Add(BitmapFrame.Create(bitmapOutput));
-                encoder.QualityLevel = 100; // Set quality level 1-100.
-
-                Random rndFileName = new Random();
-
-                using (var stream = new FileStream(@"output/" + rndFileName.Next(1, int.MaxValue).ToString() + "_" + listSource.SelectedItem.ToString(), FileMode.Create))
-                {
-                    encoder.Save(stream);
-                }
-            }                        
+                encoder.Save(stream);
+            }
+                                    
         }
                 
         public DrawingContext RenderGlyphsAlgorithm(DrawingContext drawingContext, BitmapSource image, string TextToDraw)
@@ -362,7 +361,9 @@ namespace GlyphRenderer
         private void ListSource_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {          
             if (listSource.SelectedItem != null)
-            { 
+            {
+                globalSelector = listSource.SelectedItem.ToString();
+
                 BitmapImage image = new BitmapImage();
                 image.BeginInit();
                 image.CacheOption = BitmapCacheOption.OnLoad;
