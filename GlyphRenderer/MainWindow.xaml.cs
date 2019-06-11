@@ -26,7 +26,7 @@ namespace GlyphRenderer
         string globalSelector;
 
         List<String> FileExtensions = new List<string>();
-        public DrawDelegate DrawWithSelectedAlgorithms;
+        DrawDelegate ApplySelectedAlgorithms;
         
         public MainWindow()
         {
@@ -116,13 +116,18 @@ namespace GlyphRenderer
 
         private void BtnConvert_Click(object sender, RoutedEventArgs e)
         {
+            StartConverting();
+        }
+
+        private void StartConverting()
+        {
             if (checkBoxPython.IsChecked == true)
                 PythonAlgorithm(@"main.py");
             else
-                if (DrawWithSelectedAlgorithms != null)
-                    CsharpAlgorithms();
-                else
-                    MessageBox.Show("Please select drawing algorithm");
+               if (ApplySelectedAlgorithms != null)
+                CsharpAlgorithms();
+            else
+                MessageBox.Show("Please select drawing algorithm");
         }
 
         private void PythonAlgorithm(string pythonScript)
@@ -223,7 +228,7 @@ namespace GlyphRenderer
 
                 string CharsToRender = "01";
                                 
-                DrawWithSelectedAlgorithms(drawingContext, image, CharsToRender);                
+                ApplySelectedAlgorithms(drawingContext, image, CharsToRender);                
             }
             
             Rect bounds = VisualTreeHelper.GetDescendantBounds(visual);
@@ -403,12 +408,22 @@ namespace GlyphRenderer
 
         private void CheckBoxDrawChars_Checked(object sender, RoutedEventArgs e)
         {
-            DrawWithSelectedAlgorithms += RenderCharsAlgorithm;
+            ApplySelectedAlgorithms += RenderCharsAlgorithm;
+        }
+
+        private void CheckBoxDrawChars_Unchecked(object sender, RoutedEventArgs e)
+        {
+            ApplySelectedAlgorithms -= RenderCharsAlgorithm;
         }
 
         private void CheckBoxDrawGlyphs_Checked(object sender, RoutedEventArgs e)
         {
-            DrawWithSelectedAlgorithms += RenderGlyphsAlgorithm;
+            ApplySelectedAlgorithms += RenderGlyphsAlgorithm;
+        }
+
+        private void CheckBoxDrawGlyphs_Unchecked(object sender, RoutedEventArgs e)
+        {
+            ApplySelectedAlgorithms -= RenderGlyphsAlgorithm;
         }
 
         private void CheckBoxPython_Checked(object sender, RoutedEventArgs e)
@@ -421,6 +436,26 @@ namespace GlyphRenderer
         {
             checkBoxDrawChars.IsEnabled = true;
             checkBoxDrawGlyphs.IsEnabled = true;
+        }
+
+        private void SliderFontSize_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            labelFontSize.Content = $"Font size: { sliderFontSize.Value.ToString()}";
+        }
+
+        private void SliderFontResolution_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            labelFontResolution.Content = $"Font interval: {sliderFontResolution.Value.ToString()}";
+        }
+
+        private void SliderFontSize_PreviewMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            StartConverting();
+        }
+
+        private void SliderFontResolution_PreviewMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            StartConverting();
         }
     }
 }
