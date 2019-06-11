@@ -243,17 +243,19 @@ namespace GlyphRenderer
         public DrawingContext RenderCharsAlgorithm(DrawingContext drawingContext, BitmapSource image, string TextToDraw)
         {
             Random rndChar = new Random();
+            int fontSize = (int)sliderFontSizeChars.Value;
+            int fontResolution = (int)sliderFontResolutionChars.Value;
 
-            for (int x = 0; x < image.PixelWidth; x += 7)
+            for (int x = 0; x < image.PixelWidth; x += fontResolution)
             {
-                for (int y = 0; y < image.PixelHeight; y += 7)
+                for (int y = 0; y < image.PixelHeight; y += fontResolution)
                 {
                     var text = new FormattedText(
                     TextToDraw[rndChar.Next(0, TextToDraw.Length)].ToString(),
                     CultureInfo.InvariantCulture,
                     FlowDirection.LeftToRight,
                     new Typeface("Consolas"),
-                    8,
+                    fontSize,
                     Brushes.White);
 
                     text.SetForegroundBrush(new SolidColorBrush(GetPixel2(image, x, y)));
@@ -440,12 +442,22 @@ namespace GlyphRenderer
 
         private void SliderFontSize_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
-            labelFontSize.Content = $"Font size: { sliderFontSize.Value.ToString()}";
+            labelFontSize.Content = $"Glyph size: { sliderFontSize.Value.ToString()}";
         }
 
         private void SliderFontResolution_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
-            labelFontResolution.Content = $"Font interval: {sliderFontResolution.Value.ToString()}";
+            labelFontResolution.Content = $"Glyph interval: {sliderFontResolution.Value.ToString()}";
+        }
+
+        private void SliderFontSizeChars_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            labelFontSizeChars.Content = $"Font size: { sliderFontSizeChars.Value.ToString()}";
+        }
+
+        private void SliderFontResolutionChars_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            labelFontResolutionChars.Content = $"Font interval: {sliderFontResolutionChars.Value.ToString()}";
         }
 
         private void SliderFontSize_PreviewMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
