@@ -469,5 +469,10 @@ namespace GlyphRenderer
         {
             StartConverting();
         }
+
+        private void AppExit_Click(object sender, RoutedEventArgs e)
+        {
+            System.Windows.Application.Current.Shutdown();
+        }
     }
 }

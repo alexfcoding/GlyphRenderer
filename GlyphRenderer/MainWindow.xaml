@@ -17,7 +17,7 @@
             <RowDefinition Height="865*"/>
             <RowDefinition Height="5*"/>
         </Grid.RowDefinitions>
-        <GroupBox Header="Settings" HorizontalAlignment="Left" Height="151" Margin="193,704,0,0" VerticalAlignment="Top" Width="949" Grid.Row="1" Grid.Column="1" FontSize="12"/>
+        <GroupBox Header="Settings" HorizontalAlignment="Left" Height="151" Margin="193,704,0,0" VerticalAlignment="Top" Width="1187" Grid.Row="1" Grid.Column="1" FontSize="12"/>
         <Image x:Name="imageRenderer" HorizontalAlignment="Left" Height="659" VerticalAlignment="Top" Width="1182" Margin="198,31,0,0" ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Auto" RenderTransformOrigin="0.5,0.5" Grid.Row="1" Grid.Column="1">
             <Image.RenderTransform>
                 <TransformGroup>
@@ -47,7 +47,7 @@
         <StackPanel VerticalAlignment="Top" Margin="0,0,-0.429,0" Grid.RowSpan="2" Grid.ColumnSpan="2">
             <Menu Width="Auto" Height="20" FontFamily="Consolas" FontSize="14">
                 <MenuItem Header="_File">
-                    <MenuItem x:Name="AppExit" Header="Exit" HorizontalAlignment="Left" Width="140"/>
+                    <MenuItem x:Name="AppExit" Header="Exit" HorizontalAlignment="Left" Width="140" Click="AppExit_Click"/>
                 </MenuItem>
                 <MenuItem Header="_Tools">
                     <MenuItem x:Name="Options" Header="Options" HorizontalAlignment="Left" Width="140"/>
