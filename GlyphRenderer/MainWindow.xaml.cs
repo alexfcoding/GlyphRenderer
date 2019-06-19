@@ -16,6 +16,8 @@ using System.Windows.Shapes;
 using System.Threading;
 using System.Diagnostics;
 using System.Globalization;
+using System.Net;
+using System.Net.Sockets;
 
 namespace GlyphRenderer
 {
@@ -473,6 +475,50 @@ namespace GlyphRenderer
         private void AppExit_Click(object sender, RoutedEventArgs e)
         {
             System.Windows.Application.Current.Shutdown();
+        }
+
+        private void btnConnectToServer_Click(object sender, RoutedEventArgs e)
+        {
+            PerformanceCounter cpuCounter = new PerformanceCounter("Processor", "% Processor Time", "_Total");
+
+            cpuCounter.NextValue();
+            Thread.Sleep(100);
+                        
+            int port = 5555;
+            string address = "127.0.0.1";
+
+            try
+            {
+                IPEndPoint ipPoint = new IPEndPoint(IPAddress.Parse(address), port);
+
+                Socket socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+                // подключаемся к удаленному хосту
+                socket.Connect(ipPoint);
+                MessageBox.Show(cpuCounter.NextValue().ToString() + "%");
+                listServerCommunication.Items.Add("Sending cpu load to server...");
+                string message = Math.Round(cpuCounter.NextValue()) + "%";
+                byte[] data = Encoding.UTF8.GetBytes(message);
+                socket.Send(data);
+                                
+                data = new byte[256]; // буфер для ответа
+                StringBuilder builder = new StringBuilder();
+                int bytes = 0; // количество полученных байт
+
+                do
+                {
+                    bytes = socket.Receive(data, data.Length, 0);
+                    builder.Append(Encoding.UTF8.GetString(data, 0, bytes));
+                }
+                while (socket.Available > 0);
+                listServerCommunication.Items.Add("Server answer: " + builder.ToString());
+                                
+                socket.Shutdown(SocketShutdown.Both);
+                socket.Close();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
         }
     }
 }

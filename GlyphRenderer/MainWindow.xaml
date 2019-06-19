@@ -6,7 +6,10 @@
 		xmlns:local="clr-namespace:GlyphRenderer"
 		xmlns:System="clr-namespace:System;assembly=mscorlib" x:Name="Form1" x:Class="GlyphRenderer.MainWindow"
 		mc:Ignorable="d"
-		Title="GlyphRenderer" Width="1442.777" Height="902.746" Background="White" FontFamily="Consolas" FontSize="14">
+		Title="GlyphRenderer" Width="1651.92" Height="902.746" Background="White" FontFamily="Consolas" FontSize="14">
+    <Window.Resources>
+        <SolidColorBrush x:Key="BlueButton" Color="#FF009BFF"/>
+    </Window.Resources>
     <Grid x:Name="Grid">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="16*"/>
@@ -18,7 +21,7 @@
             <RowDefinition Height="5*"/>
         </Grid.RowDefinitions>
         <GroupBox Header="Settings" HorizontalAlignment="Left" Height="151" Margin="193,704,0,0" VerticalAlignment="Top" Width="1187" Grid.Row="1" Grid.Column="1" FontSize="12"/>
-        <Image x:Name="imageRenderer" HorizontalAlignment="Left" Height="659" VerticalAlignment="Top" Width="1182" Margin="198,31,0,0" ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Auto" RenderTransformOrigin="0.5,0.5" Grid.Row="1" Grid.Column="1">
+        <Image x:Name="imageRenderer" HorizontalAlignment="Left" Height="659" VerticalAlignment="Top" Width="964" Margin="198,31,0,0" ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Auto" RenderTransformOrigin="0.5,0.5" Grid.Row="1" Grid.Column="1">
             <Image.RenderTransform>
                 <TransformGroup>
                     <ScaleTransform ScaleY="1" ScaleX="1"/>
@@ -39,7 +42,7 @@
 
         <ListBox x:Name="listProcessed" HorizontalAlignment="Left" Height="358" Margin="11,407,0,0" VerticalAlignment="Top" Width="209" SelectionChanged="ListProcessed_SelectionChanged" FontFamily="Consolas" Grid.Row="1" Grid.ColumnSpan="2"/>
         <ListBox x:Name="listSource" HorizontalAlignment="Left" Height="360" Margin="11,31,0,0" VerticalAlignment="Top" Width="209" SelectionChanged="ListSource_SelectionChanged" FontFamily="Consolas" Grid.Row="1" Grid.ColumnSpan="2"/>
-        <Button x:Name="btnConvert" Content="Convert selected" HorizontalAlignment="Left" Margin="10,825,0,0" VerticalAlignment="Top" Width="209" FontFamily="Consolas" Click="BtnConvert_Click" Height="30" BorderBrush="#FF009BFF" Foreground="#FF009BFF" Grid.Row="1" Grid.ColumnSpan="2"/>
+        <Button x:Name="btnConvert" Content="Convert selected" HorizontalAlignment="Left" Margin="10,825,0,0" VerticalAlignment="Top" Width="209" FontFamily="Consolas" Click="BtnConvert_Click" Height="30" BorderBrush="{DynamicResource BlueButton}" Foreground="#FF009BFF" Grid.Row="1" Grid.ColumnSpan="2"/>
         <Button Content="Downsize" HorizontalAlignment="Left" Margin="10,786,0,0" VerticalAlignment="Top" Width="209" Click="Button_Click" Height="30" Grid.Row="1" Grid.ColumnSpan="2"/>
         <TextBox x:Name="pythonPath" HorizontalAlignment="Left" Height="17" Margin="662,825,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="449" Text="C:\Users\Александр\AppData\Local\Programs\Python\Python37-32\python.exe" FontSize="12" TextDecorations="{x:Null}" Grid.Row="1" Grid.Column="1"/>
         <Label Content="Python path:" HorizontalAlignment="Left" Margin="662,799,0,0" VerticalAlignment="Top" Height="26" Width="106" Grid.Row="1" Grid.Column="1"/>
@@ -64,6 +67,24 @@
         <Slider x:Name="sliderFontSize" HorizontalAlignment="Left" Margin="211,779,0,0" VerticalAlignment="Top" Width="196" Maximum="50" Value="15" Minimum="1" ValueChanged="SliderFontSize_ValueChanged" SmallChange="1" TickPlacement="BottomRight" IsSnapToTickEnabled="True" Grid.Row="1" Grid.Column="1" PreviewMouseLeftButtonUp="SliderFontSize_PreviewMouseLeftButtonUp"/>
         <Slider x:Name="sliderFontResolution" HorizontalAlignment="Left" Margin="211,825,0,0" VerticalAlignment="Top" Width="196" Minimum="1" Maximum="50" Value="15" SmallChange="1" ValueChanged="SliderFontResolution_ValueChanged" TickPlacement="BottomRight" IsSnapToTickEnabled="True" Grid.Row="1" Grid.Column="1" PreviewMouseLeftButtonUp="SliderFontResolution_PreviewMouseLeftButtonUp"/>
         <Slider x:Name="sliderFontSizeChars" HorizontalAlignment="Left" Margin="438,779,0,0" VerticalAlignment="Top" Width="196" Maximum="50" Value="15" Minimum="1" ValueChanged="SliderFontSizeChars_ValueChanged" SmallChange="1" TickPlacement="BottomRight" IsSnapToTickEnabled="True" Grid.Row="1" Grid.Column="1" PreviewMouseLeftButtonUp="SliderFontSize_PreviewMouseLeftButtonUp"/>
+        <GroupBox Grid.Column="1" Header="Server connection" HorizontalAlignment="Left" Height="621" Margin="1169.714,31,0,0" Grid.Row="1" VerticalAlignment="Top" Width="356">
+            <ListBox x:Name="listServerCommunication" Height="478" Margin="0,120,-1.286,-0.857" VerticalAlignment="Top" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                <ListBox.ItemContainerStyle>
+                <Style TargetType="ListBoxItem">
+                    <Setter Property="Background" Value="Gainsboro"/>
+                    <Setter Property="Margin" Value="5"/>
+                    <Setter Property="Padding" Value="5"/>
+                </Style>
+                </ListBox.ItemContainerStyle>
+
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding}" TextWrapping="Wrap"/>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+        </GroupBox>
+        <Button x:Name="btnConnectToServer" Content="Connect" Grid.Column="1" HorizontalAlignment="Left" Margin="1169.714,657,0,0" Grid.Row="1" VerticalAlignment="Top" Width="356" Height="33" BorderBrush="{DynamicResource BlueButton}" Foreground="{DynamicResource BlueButton}" Click="btnConnectToServer_Click"/>
 
 
 
