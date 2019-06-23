@@ -101,13 +101,13 @@ namespace GlyphRenderer
             return configLines;
         }
 
-        private void FillListBox(ListBox inputListbox, string Folder, List<string> fileExtensions)
+        private void FillListBox(ListBox inputListbox, string Folder, List<string> FileExtensions)
         {
             DirectoryInfo dirInfo = new DirectoryInfo(Folder);
 
-            for (int i = 0; i < fileExtensions.Count; i++)
+            for (int i = 0; i < FileExtensions.Count; i++)
             {
-                FileInfo[] Files = dirInfo.GetFiles(fileExtensions[i]);
+                FileInfo[] Files = dirInfo.GetFiles(FileExtensions[i]);
 
                 foreach (FileInfo file in Files)
                 {
@@ -182,7 +182,7 @@ namespace GlyphRenderer
             ExportFile(bitmapOutput);
         }
                 
-        public DrawingContext RenderGlyphsAlgorithm(DrawingContext drawingContext, BitmapSource image, string textToDraw)
+        public DrawingContext RenderGlyphsAlgorithm(DrawingContext drawingContext, BitmapSource image, string TextToDraw)
         {
             Random rndChar = new Random();
             int fontSize = (int)sliderFontSize.Value;
@@ -213,13 +213,13 @@ namespace GlyphRenderer
             return drawingContext;
         }
 
-        public BitmapSource ProcessImage(BitmapSource image, bool drawOnPicture)
+        public BitmapSource ProcessImage(BitmapSource image, bool DrawOnPicture)
         {
             var visual = new DrawingVisual();
 
             using (var drawingContext = visual.RenderOpen())
             {
-                if (drawOnPicture == true)
+                if (DrawOnPicture == true)
                     drawingContext.DrawImage(image, new Rect(0, 0, image.PixelWidth, image.PixelHeight));
                 else
                 {
@@ -242,7 +242,7 @@ namespace GlyphRenderer
             return bitmap;
         }
 
-        public DrawingContext RenderCharsAlgorithm(DrawingContext drawingContext, BitmapSource image, string textToDraw)
+        public DrawingContext RenderCharsAlgorithm(DrawingContext drawingContext, BitmapSource image, string TextToDraw)
         {
             Random rndChar = new Random();
             int fontSize = (int)sliderFontSizeChars.Value;
@@ -253,7 +253,7 @@ namespace GlyphRenderer
                 for (int y = 0; y < image.PixelHeight; y += fontResolution)
                 {
                     var text = new FormattedText(
-                    textToDraw[rndChar.Next(0, textToDraw.Length)].ToString(),
+                    TextToDraw[rndChar.Next(0, TextToDraw.Length)].ToString(),
                     CultureInfo.InvariantCulture,
                     FlowDirection.LeftToRight,
                     new Typeface("Consolas"),
@@ -510,7 +510,6 @@ namespace GlyphRenderer
                     builder.Append(Encoding.UTF8.GetString(data, 0, bytes));
                 }
                 while (socket.Available > 0);
-
                 listServerCommunication.Items.Add("Server answer: " + builder.ToString());
                                 
                 socket.Shutdown(SocketShutdown.Both);
