@@ -18,6 +18,7 @@ using System.Diagnostics;
 using System.Globalization;
 using System.Net;
 using System.Net.Sockets;
+using System.Drawing;
 
 namespace GlyphRenderer
 {
@@ -33,7 +34,10 @@ namespace GlyphRenderer
         public MainWindow()
         {
             InitializeComponent();
-                        
+
+            pictureBox.Image = System.Drawing.Image.FromFile("c:\\1.jpg");
+            pictureBox.Visible = true;
+
             watchFiles();
 
             FileExtensions.Add("*.png");
@@ -101,13 +105,13 @@ namespace GlyphRenderer
             return configLines;
         }
 
-        private void FillListBox(ListBox inputListbox, string Folder, List<string> FileExtensions)
+        private void FillListBox(ListBox inputListbox, string Folder, List<string> fileExtensions)
         {
             DirectoryInfo dirInfo = new DirectoryInfo(Folder);
 
-            for (int i = 0; i < FileExtensions.Count; i++)
+            for (int i = 0; i < fileExtensions.Count; i++)
             {
-                FileInfo[] Files = dirInfo.GetFiles(FileExtensions[i]);
+                FileInfo[] Files = dirInfo.GetFiles(fileExtensions[i]);
 
                 foreach (FileInfo file in Files)
                 {
@@ -118,7 +122,50 @@ namespace GlyphRenderer
 
         private void BtnConvert_Click(object sender, RoutedEventArgs e)
         {
-            StartConverting();
+            var watch = Stopwatch.StartNew();
+            DrawTextOnPic(pictureBox.Image, watch);
+            //StartConverting();
+        }
+
+        private void DrawTextOnPic(System.Drawing.Image Picture, Stopwatch watch)
+        {
+            char[] charOut = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789".ToCharArray();
+
+            Bitmap sourcePic = new Bitmap(Picture);
+
+            Graphics clearGraphics = Graphics.FromImage(Picture);
+            System.Drawing.Brush clearBrush = new SolidBrush(System.Drawing.Color.Black);
+
+            clearGraphics.FillRectangle(clearBrush, new System.Drawing.Rectangle(0, 0, Picture.Width, Picture.Height));
+
+            Random rndNum = new Random();
+
+            using (Graphics graphics = Graphics.FromImage(Picture))
+            {
+                using (Font font = new Font("Consolas", 15))
+                {
+                    for (int i = 0; i < Picture.Width; i += 12)
+                    {
+                        for (int j = 0; j < Picture.Height; j += 12)
+                        {
+                            int randomCharIndex = rndNum.Next(0, charOut.Length);
+
+                            //if (sourcePic.GetPixel(i,j).R < 255)
+                            {
+                                System.Drawing.Color clr = sourcePic.GetPixel(i, j);
+                                System.Drawing.Brush brush = new SolidBrush(clr);
+                                graphics.DrawString(charOut[randomCharIndex].ToString(), font, brush, i, j);
+                            }
+
+                        }
+                    }
+
+                    pictureBox.Refresh();
+                    pictureBox.Visible = true;
+                }
+            }
+            watch.Stop();
+            var elapsedMs = watch.ElapsedMilliseconds;
         }
 
         private void StartConverting()
@@ -182,7 +229,7 @@ namespace GlyphRenderer
             ExportFile(bitmapOutput);
         }
                 
-        public DrawingContext RenderGlyphsAlgorithm(DrawingContext drawingContext, BitmapSource image, string TextToDraw)
+        public DrawingContext RenderGlyphsAlgorithm(DrawingContext drawingContext, BitmapSource image, string textToDraw)
         {
             Random rndChar = new Random();
             int fontSize = (int)sliderFontSize.Value;
@@ -197,7 +244,7 @@ namespace GlyphRenderer
                     false,   
                     fontSize,      
                     new ushort[] { (ushort)rndChar.Next(0, 200) }, 
-                    new Point(i, j),          
+                    new System.Windows.Point(i, j),          
                     new double[] { 50.0 },
                     null,    
                     null,    
@@ -213,13 +260,13 @@ namespace GlyphRenderer
             return drawingContext;
         }
 
-        public BitmapSource ProcessImage(BitmapSource image, bool DrawOnPicture)
+        public BitmapSource ProcessImage(BitmapSource image, bool drawOnPicture)
         {
             var visual = new DrawingVisual();
 
             using (var drawingContext = visual.RenderOpen())
             {
-                if (DrawOnPicture == true)
+                if (drawOnPicture == true)
                     drawingContext.DrawImage(image, new Rect(0, 0, image.PixelWidth, image.PixelHeight));
                 else
                 {
@@ -242,7 +289,7 @@ namespace GlyphRenderer
             return bitmap;
         }
 
-        public DrawingContext RenderCharsAlgorithm(DrawingContext drawingContext, BitmapSource image, string TextToDraw)
+        public DrawingContext RenderCharsAlgorithm(DrawingContext drawingContext, BitmapSource image, string textToDraw)
         {
             Random rndChar = new Random();
             int fontSize = (int)sliderFontSizeChars.Value;
@@ -253,15 +300,15 @@ namespace GlyphRenderer
                 for (int y = 0; y < image.PixelHeight; y += fontResolution)
                 {
                     var text = new FormattedText(
-                    TextToDraw[rndChar.Next(0, TextToDraw.Length)].ToString(),
+                    textToDraw[rndChar.Next(0, textToDraw.Length)].ToString(),
                     CultureInfo.InvariantCulture,
                     FlowDirection.LeftToRight,
                     new Typeface("Consolas"),
                     fontSize,
-                    Brushes.White);
+                    System.Windows.Media.Brushes.White);
 
                     text.SetForegroundBrush(new SolidColorBrush(GetPixel2(image, x, y)));
-                    drawingContext.DrawText(text, new Point(x, y));
+                    drawingContext.DrawText(text, new System.Windows.Point(x, y));
                 }
             }
 
@@ -301,7 +348,7 @@ namespace GlyphRenderer
             return bmp;
         }
 
-        public Color GetPixel(BitmapSource bitmap, int x, int y)
+        public System.Windows.Media.Color GetPixel(BitmapSource bitmap, int x, int y)
         {
             Debug.Assert(bitmap != null);
             Debug.Assert(x >= 0);
@@ -313,12 +360,12 @@ namespace GlyphRenderer
             CroppedBitmap cb = new CroppedBitmap(bitmap, new Int32Rect(x, y, 1, 1));
             byte[] pixel = new byte[bitmap.Format.BitsPerPixel / 8];
             cb.CopyPixels(pixel, bitmap.Format.BitsPerPixel / 8, 0);
-            return Color.FromRgb(pixel[2], pixel[1], pixel[0]);
+            return System.Windows.Media.Color.FromRgb(pixel[2], pixel[1], pixel[0]);
         }
 
-        public static Color GetPixel2(BitmapSource bitmap, int x, int y)
+        public static System.Windows.Media.Color GetPixel2(BitmapSource bitmap, int x, int y)
         {
-            Color color;
+            System.Windows.Media.Color color;
             var bytesPerPixel = (bitmap.Format.BitsPerPixel + 7) / 8;
             var bytes = new byte[bytesPerPixel];
             var rect = new Int32Rect(x, y, 1, 1);
@@ -327,11 +374,11 @@ namespace GlyphRenderer
 
             if (bitmap.Format == PixelFormats.Bgra32)
             {
-                color = Color.FromArgb(bytes[3], bytes[2], bytes[1], bytes[0]);
+                color = System.Windows.Media.Color.FromArgb(bytes[3], bytes[2], bytes[1], bytes[0]);
             }
             else if (bitmap.Format == PixelFormats.Bgr32)
             {
-                color = Color.FromRgb(bytes[2], bytes[1], bytes[0]);
+                color = System.Windows.Media.Color.FromRgb(bytes[2], bytes[1], bytes[0]);
             }            
             else
             {
@@ -510,6 +557,7 @@ namespace GlyphRenderer
                     builder.Append(Encoding.UTF8.GetString(data, 0, bytes));
                 }
                 while (socket.Available > 0);
+
                 listServerCommunication.Items.Add("Server answer: " + builder.ToString());
                                 
                 socket.Shutdown(SocketShutdown.Both);
