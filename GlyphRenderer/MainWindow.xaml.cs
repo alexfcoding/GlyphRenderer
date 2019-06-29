@@ -122,50 +122,7 @@ namespace GlyphRenderer
 
         private void BtnConvert_Click(object sender, RoutedEventArgs e)
         {
-            var watch = Stopwatch.StartNew();
-            DrawTextOnPic(pictureBox.Image, watch);
-            //StartConverting();
-        }
-
-        private void DrawTextOnPic(System.Drawing.Image Picture, Stopwatch watch)
-        {
-            char[] charOut = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789".ToCharArray();
-
-            Bitmap sourcePic = new Bitmap(Picture);
-
-            Graphics clearGraphics = Graphics.FromImage(Picture);
-            System.Drawing.Brush clearBrush = new SolidBrush(System.Drawing.Color.Black);
-
-            clearGraphics.FillRectangle(clearBrush, new System.Drawing.Rectangle(0, 0, Picture.Width, Picture.Height));
-
-            Random rndNum = new Random();
-
-            using (Graphics graphics = Graphics.FromImage(Picture))
-            {
-                using (Font font = new Font("Consolas", 15))
-                {
-                    for (int i = 0; i < Picture.Width; i += 12)
-                    {
-                        for (int j = 0; j < Picture.Height; j += 12)
-                        {
-                            int randomCharIndex = rndNum.Next(0, charOut.Length);
-
-                            //if (sourcePic.GetPixel(i,j).R < 255)
-                            {
-                                System.Drawing.Color clr = sourcePic.GetPixel(i, j);
-                                System.Drawing.Brush brush = new SolidBrush(clr);
-                                graphics.DrawString(charOut[randomCharIndex].ToString(), font, brush, i, j);
-                            }
-
-                        }
-                    }
-
-                    pictureBox.Refresh();
-                    pictureBox.Visible = true;
-                }
-            }
-            watch.Stop();
-            var elapsedMs = watch.ElapsedMilliseconds;
+            StartConverting();
         }
 
         private void StartConverting()
@@ -209,26 +166,54 @@ namespace GlyphRenderer
 
         private void CsharpAlgorithms()
         {
-            BitmapImage bitImage = new BitmapImage();
-            bitImage.BeginInit();
-            bitImage.CacheOption = BitmapCacheOption.OnLoad;
-               
-            bitImage.UriSource = new Uri(@"prepare\" + globalSelector, UriKind.Relative);
-            bitImage.EndInit();
+            if (checkBoxUseGDI.IsChecked == false)
+            {
+                SwapRenderers(false);
 
-            var bmptmp = BitmapSource.Create(1, 1, 96, 96, PixelFormats.Bgr24, null, new byte[3] { 0, 0, 0 }, 3);
-           
-            BitmapSource bitmapOutput;
-            if (checkBoxDrawOnImage.IsChecked == true)
-                bitmapOutput = ProcessImage(bitImage, true);
+                BitmapImage bitImage = new BitmapImage();
+                bitImage.BeginInit();
+                bitImage.CacheOption = BitmapCacheOption.OnLoad;
+
+                bitImage.UriSource = new Uri(@"prepare\" + globalSelector, UriKind.Relative);
+                bitImage.EndInit();
+
+                var bmptmp = BitmapSource.Create(1, 1, 96, 96, PixelFormats.Bgr24, null, new byte[3] { 0, 0, 0 }, 3);
+
+                BitmapSource bitmapOutput;
+                if (checkBoxDrawOnImage.IsChecked == true)
+                    bitmapOutput = ProcessImage(bitImage, true);
+                else
+                    bitmapOutput = ProcessImage(bitImage, false);
+
+                imageRenderer.Source = bitmapOutput;
+
+                ExportFile(bitmapOutput);
+            }
             else
-                bitmapOutput = ProcessImage(bitImage, false);
-
-            imageRenderer.Source = bitmapOutput;
-
-            ExportFile(bitmapOutput);
+            {
+                SwapRenderers(true);
+                
+                var watch = Stopwatch.StartNew();
+                DrawTextOnPic(pictureBox.Image, watch);
+            }
         }
                 
+        public void SwapRenderers (bool isGDIDrawing)
+        {
+            if (isGDIDrawing == false)
+            {
+                imageRenderer.Visibility = Visibility.Visible;
+                formsHost.Visibility = Visibility.Hidden;
+                pictureBox.Visible = false;
+            }
+            else
+            {
+                imageRenderer.Visibility = Visibility.Hidden;
+                formsHost.Visibility = Visibility.Visible;
+                pictureBox.Visible = true;
+            }
+        }
+
         public DrawingContext RenderGlyphsAlgorithm(DrawingContext drawingContext, BitmapSource image, string textToDraw)
         {
             Random rndChar = new Random();
@@ -329,7 +314,46 @@ namespace GlyphRenderer
                 encoder.Save(stream);
             }
         }
-        
+
+        private void DrawTextOnPic(System.Drawing.Image Picture, Stopwatch watch)
+        {
+            char[] charOut = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789".ToCharArray();
+
+            Bitmap sourcePic = new Bitmap(Picture);
+
+            Graphics clearGraphics = Graphics.FromImage(Picture);
+            System.Drawing.Brush clearBrush = new SolidBrush(System.Drawing.Color.Black);
+
+            clearGraphics.FillRectangle(clearBrush, new System.Drawing.Rectangle(0, 0, Picture.Width, Picture.Height));
+
+            Random rndNum = new Random();
+
+            using (Graphics graphics = Graphics.FromImage(Picture))
+            {
+                using (Font font = new Font("Consolas", 15))
+                {
+                    for (int i = 0; i < Picture.Width; i += 12)
+                    {
+                        for (int j = 0; j < Picture.Height; j += 12)
+                        {
+                            int randomCharIndex = rndNum.Next(0, charOut.Length);
+
+                            //if (sourcePic.GetPixel(i,j).R < 255)
+                            {
+                                System.Drawing.Color clr = sourcePic.GetPixel(i, j);
+                                System.Drawing.Brush brush = new SolidBrush(clr);
+                                graphics.DrawString(charOut[randomCharIndex].ToString(), font, brush, i, j);
+                            }
+
+                        }
+                    }
+                    pictureBox.Refresh();
+                }
+            }
+            watch.Stop();
+            var elapsedMs = watch.ElapsedMilliseconds;
+        }
+
         public BitmapImage ConvertWriteableBitmapToBitmapImage(WriteableBitmap wbm)
         {
             BitmapImage bmp = new BitmapImage();
@@ -419,7 +443,9 @@ namespace GlyphRenderer
         }
 
         private void ListSource_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {          
+        {
+            SwapRenderers(false);
+
             if (listSource.SelectedItem != null)
             {
                 globalSelector = listSource.SelectedItem.ToString();
