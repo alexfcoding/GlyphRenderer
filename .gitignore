@@ -12,6 +12,8 @@
 *.exe
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
+*.jpg
+*.png
 
 # Build results
 

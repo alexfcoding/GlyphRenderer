@@ -26,18 +26,20 @@ namespace GlyphRenderer
     
     public partial class MainWindow : Window
     {
-        string globalSelector;
+        private string globalSelector;
 
-        List<String> FileExtensions = new List<string>();
-        DrawDelegate ApplySelectedAlgorithms;
+        private List<String> FileExtensions = new List<string>();
+        private DrawDelegate ApplySelectedAlgorithms;
         
         public MainWindow()
         {
             InitializeComponent();
+            PrepareForm();
+        }
 
-            pictureBox.Image = System.Drawing.Image.FromFile("c:\\1.jpg");
-            pictureBox.Visible = true;
-
+        private void PrepareForm()
+        {
+            pictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             watchFiles();
 
             FileExtensions.Add("*.png");
@@ -47,7 +49,9 @@ namespace GlyphRenderer
             FillListBox(listProcessed, @"output", FileExtensions);
 
             if (listSource.Items[0] != null)
+            {
                 listSource.SelectedIndex = 0;
+            }
 
             pythonPath.Text = LoadConfig(pythonPath)[0];
         }
@@ -71,12 +75,12 @@ namespace GlyphRenderer
             watcherOutput.EnableRaisingEvents = true;
         }
         
-        public void OnNewFilesFound(object source, FileSystemEventArgs e)
+        private void OnNewFilesFound(object source, FileSystemEventArgs e)
         {
             Dispatcher.BeginInvoke(new Action(() => refreshList()));
         }
 
-        public void refreshList()
+        private void refreshList()
         {
             listSource.Items.Clear();
             FillListBox(listSource, @"prepare", FileExtensions);
@@ -130,8 +134,8 @@ namespace GlyphRenderer
             if (checkBoxPython.IsChecked == true)
                 PythonAlgorithm(@"main.py");
             else
-               if (ApplySelectedAlgorithms != null)
-                CsharpAlgorithms();
+                if (ApplySelectedAlgorithms != null)
+                    CsharpAlgorithms();
             else
                 MessageBox.Show("Please select drawing algorithm");
         }
@@ -159,7 +163,7 @@ namespace GlyphRenderer
                     encoder.Save(stream);
                 }
 
-                Thread.Sleep(200);
+                Thread.Sleep(20);
                 ExecutePython(pyPath, pyScript);
             }
         }
@@ -198,7 +202,7 @@ namespace GlyphRenderer
             }
         }
                 
-        public void SwapRenderers (bool isGDIDrawing)
+        private void SwapRenderers (bool isGDIDrawing)
         {
             if (isGDIDrawing == false)
             {
@@ -214,7 +218,7 @@ namespace GlyphRenderer
             }
         }
 
-        public DrawingContext RenderGlyphsAlgorithm(DrawingContext drawingContext, BitmapSource image, string textToDraw)
+        private DrawingContext RenderGlyphsAlgorithm(DrawingContext drawingContext, BitmapSource image, string textToDraw)
         {
             Random rndChar = new Random();
             int fontSize = (int)sliderFontSize.Value;
@@ -245,7 +249,7 @@ namespace GlyphRenderer
             return drawingContext;
         }
 
-        public BitmapSource ProcessImage(BitmapSource image, bool drawOnPicture)
+        private BitmapSource ProcessImage(BitmapSource image, bool drawOnPicture)
         {
             var visual = new DrawingVisual();
 
@@ -274,7 +278,7 @@ namespace GlyphRenderer
             return bitmap;
         }
 
-        public DrawingContext RenderCharsAlgorithm(DrawingContext drawingContext, BitmapSource image, string textToDraw)
+        private DrawingContext RenderCharsAlgorithm(DrawingContext drawingContext, BitmapSource image, string textToDraw)
         {
             Random rndChar = new Random();
             int fontSize = (int)sliderFontSizeChars.Value;
@@ -300,7 +304,7 @@ namespace GlyphRenderer
             return drawingContext;
         }
 
-        public void ExportFile (BitmapSource imageToExport)
+        private void ExportFile (BitmapSource imageToExport)
         {
             var encoder = new JpegBitmapEncoder(); // Or any other, e.g. PngBitmapEncoder for PNG.
 
@@ -317,6 +321,8 @@ namespace GlyphRenderer
 
         private void DrawTextOnPic(System.Drawing.Image Picture, Stopwatch watch)
         {
+            Picture = System.Drawing.Image.FromFile(@"prepare\" + globalSelector);
+
             char[] charOut = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789".ToCharArray();
 
             Bitmap sourcePic = new Bitmap(Picture);
@@ -347,14 +353,15 @@ namespace GlyphRenderer
 
                         }
                     }
-                    pictureBox.Refresh();
+                    pictureBox.Image = Picture;
+                    pictureBox.Refresh();                    
                 }
             }
             watch.Stop();
             var elapsedMs = watch.ElapsedMilliseconds;
         }
 
-        public BitmapImage ConvertWriteableBitmapToBitmapImage(WriteableBitmap wbm)
+        private BitmapImage ConvertWriteableBitmapToBitmapImage(WriteableBitmap wbm)
         {
             BitmapImage bmp = new BitmapImage();
             using (MemoryStream stream = new MemoryStream())
@@ -372,7 +379,7 @@ namespace GlyphRenderer
             return bmp;
         }
 
-        public System.Windows.Media.Color GetPixel(BitmapSource bitmap, int x, int y)
+        private System.Windows.Media.Color GetPixel(BitmapSource bitmap, int x, int y)
         {
             Debug.Assert(bitmap != null);
             Debug.Assert(x >= 0);
@@ -387,7 +394,7 @@ namespace GlyphRenderer
             return System.Windows.Media.Color.FromRgb(pixel[2], pixel[1], pixel[0]);
         }
 
-        public static System.Windows.Media.Color GetPixel2(BitmapSource bitmap, int x, int y)
+        private static System.Windows.Media.Color GetPixel2(BitmapSource bitmap, int x, int y)
         {
             System.Windows.Media.Color color;
             var bytesPerPixel = (bitmap.Format.BitsPerPixel + 7) / 8;
@@ -444,8 +451,6 @@ namespace GlyphRenderer
 
         private void ListSource_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            SwapRenderers(false);
-
             if (listSource.SelectedItem != null)
             {
                 globalSelector = listSource.SelectedItem.ToString();
@@ -456,6 +461,15 @@ namespace GlyphRenderer
                 image.UriSource = new Uri(@"prepare\" + listSource.SelectedItem.ToString(), UriKind.Relative);
                 image.EndInit();
                 imageRenderer.Source = image;
+
+                pictureBox.Image = System.Drawing.Image.FromFile(@"prepare\" + globalSelector);
+
+                if (checkBoxUseGDI.IsChecked == false)
+                {
+                    SwapRenderers(false);
+                }
+                else
+                    SwapRenderers(true);
             }
 
             listProcessed.UnselectAll();
@@ -593,6 +607,20 @@ namespace GlyphRenderer
             {
                 Console.WriteLine(ex.Message);
             }
+        }
+
+        private void CheckBoxUseGDI_Checked(object sender, RoutedEventArgs e)
+        {
+            checkBoxDrawChars.IsEnabled = false;
+            checkBoxDrawGlyphs.IsEnabled = false;
+            checkBoxDrawChars.IsChecked = true;
+            checkBoxDrawGlyphs.IsChecked = false;
+        }
+
+        private void CheckBoxUseGDI_Unchecked(object sender, RoutedEventArgs e)
+        {
+            checkBoxDrawChars.IsEnabled = true;
+            checkBoxDrawGlyphs.IsEnabled = true;
         }
     }
 }
