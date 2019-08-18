@@ -5,7 +5,7 @@
 		xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 		xmlns:local="clr-namespace:GlyphRenderer"
 		xmlns:System="clr-namespace:System;assembly=mscorlib"
-        xmlns:wf3="clr-namespace:System.Windows.Forms;assembly=System.Windows.Forms" x:Name="Form1" x:Class="GlyphRenderer.MainWindow"
+		xmlns:wf3="clr-namespace:System.Windows.Forms;assembly=System.Windows.Forms" x:Name="Form1" x:Class="GlyphRenderer.MainWindow"
 		mc:Ignorable="d"
 		Title="GlyphRenderer" Width="1651.92" Height="902.746" Background="White" FontFamily="Consolas" FontSize="14">
     <Window.Resources>
@@ -26,8 +26,9 @@
             <RowDefinition Height="5*"/>
         </Grid.RowDefinitions>
         <GroupBox Header="Settings" HorizontalAlignment="Left" Height="151" Margin="192.714,704,0,0" VerticalAlignment="Top" Width="1364.143" Grid.Row="1" Grid.Column="1" FontSize="12" Grid.RowSpan="2">
-            <CheckBox x:Name="checkBoxUseGDI" Content="Use GDI+" HorizontalAlignment="Left" Margin="382,10,0,0" VerticalAlignment="Top" FontSize="14" Checked="CheckBoxUseGDI_Checked" Unchecked="CheckBoxUseGDI_Unchecked"/>
+
         </GroupBox>
+
 
         <Image x:Name="imageRenderer" HorizontalAlignment="Left" Height="673" VerticalAlignment="Top" Width="1359.143" Margin="197.714,31,0,0" ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Auto" RenderTransformOrigin="0.5,0.5" Grid.Row="1" Grid.Column="1">
             <Image.RenderTransform>
@@ -70,6 +71,7 @@
         <CheckBox x:Name="checkBoxDrawChars" Content="Render chars" HorizontalAlignment="Left" Margin="437.714,731,0,0" VerticalAlignment="Top" Checked="CheckBoxDrawChars_Checked" Unchecked="CheckBoxDrawChars_Unchecked" Grid.Row="1" Grid.Column="1" Background="#FF2CFF00"/>
         <CheckBox x:Name="checkBoxDrawGlyphs" Content="Render glyphs" HorizontalAlignment="Left" Margin="210.714,731,0,0" VerticalAlignment="Top" Checked="CheckBoxDrawGlyphs_Checked" Unchecked="CheckBoxDrawGlyphs_Unchecked" Grid.Row="1" Grid.Column="1" Background="#FF01BDFF" RenderTransformOrigin="0.292,1.093"/>
         <CheckBox x:Name="checkBoxDrawOnImage" Content="Draw on image" HorizontalAlignment="Left" Margin="696.714,732,0,0" VerticalAlignment="Top" Grid.Row="1" Grid.Column="1"/>
+        <CheckBox x:Name="checkBoxUseGDI" Content="Use GDI+" HorizontalAlignment="Left" Margin="576.714,731,0,0" VerticalAlignment="Top" FontSize="14" Checked="CheckBoxUseGDI_Checked" Unchecked="CheckBoxUseGDI_Unchecked" Height="15" Grid.Column="1" Grid.Row="1"/>
         <Slider x:Name="sliderFontSize" HorizontalAlignment="Left" Margin="210.714,779,0,0" VerticalAlignment="Top" Width="196" Maximum="50" Value="15" Minimum="1" ValueChanged="SliderFontSize_ValueChanged" SmallChange="1" TickPlacement="BottomRight" IsSnapToTickEnabled="True" Grid.Row="1" Grid.Column="1" PreviewMouseLeftButtonUp="SliderFontSize_PreviewMouseLeftButtonUp" Grid.RowSpan="2"/>
         <Slider x:Name="sliderFontResolution" HorizontalAlignment="Left" Margin="210.714,32.286,0,0" VerticalAlignment="Top" Width="196" Minimum="1" Maximum="50" Value="15" SmallChange="1" ValueChanged="SliderFontResolution_ValueChanged" TickPlacement="BottomRight" IsSnapToTickEnabled="True" Grid.Row="2" Grid.Column="1" PreviewMouseLeftButtonUp="SliderFontResolution_PreviewMouseLeftButtonUp"/>
         <Slider x:Name="sliderFontSizeChars" HorizontalAlignment="Left" Margin="437.714,779,0,0" VerticalAlignment="Top" Width="226" Maximum="50" Value="15" Minimum="1" ValueChanged="SliderFontSizeChars_ValueChanged" SmallChange="1" TickPlacement="BottomRight" IsSnapToTickEnabled="True" Grid.Row="1" Grid.Column="1" PreviewMouseLeftButtonUp="SliderFontSize_PreviewMouseLeftButtonUp" Grid.RowSpan="2"/>
