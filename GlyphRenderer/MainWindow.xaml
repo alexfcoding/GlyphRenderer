@@ -21,16 +21,16 @@
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="4*"/>
-            <RowDefinition Height="793*"/>
-            <RowDefinition Height="73*"/>
+            <RowDefinition Height="799*"/>
+            <RowDefinition Height="66*"/>
             <RowDefinition Height="5*"/>
         </Grid.RowDefinitions>
-        <GroupBox Header="Settings" HorizontalAlignment="Left" Height="151" Margin="192.714,704,0,0" VerticalAlignment="Top" Width="1364.143" Grid.Row="1" Grid.Column="1" FontSize="12" Grid.RowSpan="2">
+        <GroupBox Header="Settings" HorizontalAlignment="Left" Height="151" Margin="193,704,0,0" VerticalAlignment="Top" Width="1364" Grid.Row="1" Grid.Column="1" FontSize="12" Grid.RowSpan="2">
 
         </GroupBox>
 
 
-        <Image x:Name="imageRenderer" HorizontalAlignment="Left" Height="673" VerticalAlignment="Top" Width="1359.143" Margin="197.714,31,0,0" ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Auto" RenderTransformOrigin="0.5,0.5" Grid.Row="1" Grid.Column="1">
+        <Image x:Name="imageRenderer" HorizontalAlignment="Left" Height="673" VerticalAlignment="Top" Width="1359" Margin="198,31,0,0" ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Auto" RenderTransformOrigin="0.5,0.5" Grid.Row="1" Grid.Column="1">
             <Image.RenderTransform>
                 <TransformGroup>
                     <ScaleTransform ScaleY="1" ScaleX="1"/>
@@ -41,20 +41,20 @@
             </Image.RenderTransform>
         </Image>
 
-        <Label x:Name="labelFontResolution" Content="Glyph interval: " HorizontalAlignment="Left" Margin="210.714,6.286,0,0" VerticalAlignment="Top" Grid.Row="2" Grid.Column="1"/>
-        <Label x:Name="labelFontSize" Content="Glyph size: " HorizontalAlignment="Left" Margin="210.714,752,0,0" VerticalAlignment="Top" Grid.Row="1" Grid.Column="1"/>
-        <Label x:Name="labelFontResolutionChars" Content="Font interval: " HorizontalAlignment="Left" Margin="437.714,6.286,0,0" VerticalAlignment="Top" Grid.Row="2" Grid.Column="1"/>
-        <Label x:Name="labelFontSizeChars" Content="Font size: " HorizontalAlignment="Left" Margin="437.714,752,0,0" VerticalAlignment="Top" Grid.Row="1" Grid.Column="1"/>
+        <Label x:Name="labelFontResolution" Content="Glyph interval: " HorizontalAlignment="Left" Margin="211,6,0,0" VerticalAlignment="Top" Grid.Row="2" Grid.Column="1" Height="26" Width="133"/>
+        <Label x:Name="labelFontSize" Content="Glyph size: " HorizontalAlignment="Left" Margin="211,752,0,0" VerticalAlignment="Top" Grid.Row="1" Grid.Column="1" Height="26" Width="102"/>
+        <Label x:Name="labelFontResolutionChars" Content="Font interval: " HorizontalAlignment="Left" Margin="438,6,0,0" VerticalAlignment="Top" Grid.Row="2" Grid.Column="1" Height="26" Width="125"/>
+        <Label x:Name="labelFontSizeChars" Content="Font size: " HorizontalAlignment="Left" Margin="438,752,0,0" VerticalAlignment="Top" Grid.Row="1" Grid.Column="1" Height="26" Width="95"/>
 
 
         <ListBox x:Name="listProcessed" HorizontalAlignment="Left" Height="358" Margin="11,407,0,0" VerticalAlignment="Top" Width="209" SelectionChanged="ListProcessed_SelectionChanged" FontFamily="Consolas" Grid.Row="1" Grid.ColumnSpan="2"/>
         <ListBox x:Name="listSource" HorizontalAlignment="Left" Height="360" Margin="11,31,0,0" VerticalAlignment="Top" Width="209" SelectionChanged="ListSource_SelectionChanged" FontFamily="Consolas" Grid.Row="1" Grid.ColumnSpan="2"/>
-        <Button x:Name="btnConvert" Content="Convert selected" HorizontalAlignment="Left" Margin="10,32.286,0,0" VerticalAlignment="Top" Width="209" FontFamily="Consolas" Click="BtnConvert_Click" Height="30" BorderBrush="{DynamicResource BlueButton}" Foreground="#FF009BFF" Grid.Row="2" Grid.ColumnSpan="2"/>
-        <Button Content="Downsize" HorizontalAlignment="Left" Margin="10,786,0,0" VerticalAlignment="Top" Width="209" Click="Button_Click" Height="30" Grid.Row="1" Grid.ColumnSpan="2" Grid.RowSpan="2"/>
-        <TextBox x:Name="pythonPath" HorizontalAlignment="Left" Height="17" Margin="696.714,32.857,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="449" Text="C:\Users\Александр\AppData\Local\Programs\Python\Python37-32\python.exe" FontSize="12" TextDecorations="{x:Null}" Grid.Row="2" Grid.Column="1"/>
-        <Label Content="Python path:" HorizontalAlignment="Left" Margin="696.714,5.857,0,0" VerticalAlignment="Top" Height="26" Width="106" Grid.Row="2" Grid.Column="1"/>
+        <Button x:Name="btnConvert" Content="Convert selected" HorizontalAlignment="Left" Margin="10,32,0,0" VerticalAlignment="Top" Width="209" FontFamily="Consolas" Click="BtnConvert_Click" Height="30" BorderBrush="{DynamicResource BlueButton}" Foreground="#FF009BFF" Grid.Row="2" Grid.ColumnSpan="2"/>
+        <Button Content="Downsize" HorizontalAlignment="Left" Margin="10,0,0,0" VerticalAlignment="Top" Width="209" Click="Button_Click" Height="30" Grid.Row="2" Grid.ColumnSpan="2"/>
+        <TextBox x:Name="pythonPath" HorizontalAlignment="Left" Height="17" Margin="697,33,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="449" Text="C:\Users\Александр\AppData\Local\Programs\Python\Python37-32\python.exe" FontSize="12" TextDecorations="{x:Null}" Grid.Row="2" Grid.Column="1"/>
+        <Label Content="Python path:" HorizontalAlignment="Left" Margin="697,6,0,0" VerticalAlignment="Top" Height="26" Width="106" Grid.Row="2" Grid.Column="1"/>
 
-        <StackPanel VerticalAlignment="Top" Margin="0,0,-0.286,0" Grid.RowSpan="2" Grid.ColumnSpan="2">
+        <StackPanel VerticalAlignment="Top" Grid.RowSpan="2" Grid.ColumnSpan="2" Height="20">
             <Menu Width="Auto" Height="20" FontFamily="Consolas" FontSize="14">
                 <MenuItem Header="_File">
                     <MenuItem x:Name="AppExit" Header="Exit" HorizontalAlignment="Left" Width="140" Click="AppExit_Click"/>
@@ -67,17 +67,17 @@
                 </MenuItem>
             </Menu>
         </StackPanel>
-        <CheckBox x:Name="checkBoxPython" Content="Use Python algorithms" HorizontalAlignment="Left" Margin="696.714,779,0,0" VerticalAlignment="Top" Checked="CheckBoxPython_Checked" Unchecked="CheckBoxPython_Unchecked" FontWeight="Bold" FontFamily="Consolas" Grid.Row="1" Grid.Column="1" Grid.RowSpan="2"/>
-        <CheckBox x:Name="checkBoxDrawChars" Content="Render chars" HorizontalAlignment="Left" Margin="437.714,731,0,0" VerticalAlignment="Top" Checked="CheckBoxDrawChars_Checked" Unchecked="CheckBoxDrawChars_Unchecked" Grid.Row="1" Grid.Column="1" Background="#FF2CFF00"/>
-        <CheckBox x:Name="checkBoxDrawGlyphs" Content="Render glyphs" HorizontalAlignment="Left" Margin="210.714,731,0,0" VerticalAlignment="Top" Checked="CheckBoxDrawGlyphs_Checked" Unchecked="CheckBoxDrawGlyphs_Unchecked" Grid.Row="1" Grid.Column="1" Background="#FF01BDFF" RenderTransformOrigin="0.292,1.093"/>
-        <CheckBox x:Name="checkBoxDrawOnImage" Content="Draw on image" HorizontalAlignment="Left" Margin="696.714,732,0,0" VerticalAlignment="Top" Grid.Row="1" Grid.Column="1"/>
-        <CheckBox x:Name="checkBoxUseGDI" Content="Use GDI+" HorizontalAlignment="Left" Margin="576.714,731,0,0" VerticalAlignment="Top" FontSize="14" Checked="CheckBoxUseGDI_Checked" Unchecked="CheckBoxUseGDI_Unchecked" Height="15" Grid.Column="1" Grid.Row="1"/>
-        <Slider x:Name="sliderFontSize" HorizontalAlignment="Left" Margin="210.714,779,0,0" VerticalAlignment="Top" Width="196" Maximum="50" Value="15" Minimum="1" ValueChanged="SliderFontSize_ValueChanged" SmallChange="1" TickPlacement="BottomRight" IsSnapToTickEnabled="True" Grid.Row="1" Grid.Column="1" PreviewMouseLeftButtonUp="SliderFontSize_PreviewMouseLeftButtonUp" Grid.RowSpan="2"/>
-        <Slider x:Name="sliderFontResolution" HorizontalAlignment="Left" Margin="210.714,32.286,0,0" VerticalAlignment="Top" Width="196" Minimum="1" Maximum="50" Value="15" SmallChange="1" ValueChanged="SliderFontResolution_ValueChanged" TickPlacement="BottomRight" IsSnapToTickEnabled="True" Grid.Row="2" Grid.Column="1" PreviewMouseLeftButtonUp="SliderFontResolution_PreviewMouseLeftButtonUp"/>
-        <Slider x:Name="sliderFontSizeChars" HorizontalAlignment="Left" Margin="437.714,779,0,0" VerticalAlignment="Top" Width="226" Maximum="50" Value="15" Minimum="1" ValueChanged="SliderFontSizeChars_ValueChanged" SmallChange="1" TickPlacement="BottomRight" IsSnapToTickEnabled="True" Grid.Row="1" Grid.Column="1" PreviewMouseLeftButtonUp="SliderFontSize_PreviewMouseLeftButtonUp" Grid.RowSpan="2"/>
-        <Slider x:Name="sliderFontResolutionChars" HorizontalAlignment="Left" Margin="437.714,31.857,0,0" VerticalAlignment="Top" Width="226" Minimum="1" Maximum="50" Value="15" SmallChange="1" ValueChanged="SliderFontResolutionChars_ValueChanged" TickPlacement="BottomRight" IsSnapToTickEnabled="True" Grid.Row="2" Grid.Column="1" PreviewMouseLeftButtonUp="SliderFontResolution_PreviewMouseLeftButtonUp"/>
+        <CheckBox x:Name="checkBoxPython" Content="Use Python algorithms" HorizontalAlignment="Left" Margin="697,779,0,0" VerticalAlignment="Top" Checked="CheckBoxPython_Checked" Unchecked="CheckBoxPython_Unchecked" FontWeight="Bold" FontFamily="Consolas" Grid.Row="1" Grid.Column="1" Height="15" Width="182"/>
+        <CheckBox x:Name="checkBoxDrawChars" Content="Render chars" HorizontalAlignment="Left" Margin="438,731,0,0" VerticalAlignment="Top" Checked="CheckBoxDrawChars_Checked" Unchecked="CheckBoxDrawChars_Unchecked" Grid.Row="1" Grid.Column="1" Background="#FF2CFF00" Height="15" Width="112"/>
+        <CheckBox x:Name="checkBoxDrawGlyphs" Content="Render glyphs" HorizontalAlignment="Left" Margin="211,731,0,0" VerticalAlignment="Top" Checked="CheckBoxDrawGlyphs_Checked" Unchecked="CheckBoxDrawGlyphs_Unchecked" Grid.Row="1" Grid.Column="1" Background="#FF01BDFF" RenderTransformOrigin="0.292,1.093" Height="15" Width="120"/>
+        <CheckBox x:Name="checkBoxDrawOnImage" Content="Draw on image" HorizontalAlignment="Left" Margin="697,732,0,0" VerticalAlignment="Top" Grid.Row="1" Grid.Column="1" Height="15" Width="120"/>
+        <CheckBox x:Name="checkBoxUseGDI" Content="Use GDI+" HorizontalAlignment="Left" Margin="577,731,0,0" VerticalAlignment="Top" FontSize="14" Checked="CheckBoxUseGDI_Checked" Unchecked="CheckBoxUseGDI_Unchecked" Height="15" Grid.Column="1" Grid.Row="1" Width="82"/>
+        <Slider x:Name="sliderFontSize" HorizontalAlignment="Left" Margin="211,779,0,0" VerticalAlignment="Top" Width="196" Maximum="50" Value="15" Minimum="1" ValueChanged="SliderFontSize_ValueChanged" SmallChange="1" TickPlacement="BottomRight" IsSnapToTickEnabled="True" Grid.Row="1" Grid.Column="1" PreviewMouseLeftButtonUp="SliderFontSize_PreviewMouseLeftButtonUp" Height="24" Grid.RowSpan="2"/>
+        <Slider x:Name="sliderFontResolution" HorizontalAlignment="Left" Margin="211,32,0,0" VerticalAlignment="Top" Width="196" Minimum="1" Maximum="50" Value="15" SmallChange="1" ValueChanged="SliderFontResolution_ValueChanged" TickPlacement="BottomRight" IsSnapToTickEnabled="True" Grid.Row="2" Grid.Column="1" PreviewMouseLeftButtonUp="SliderFontResolution_PreviewMouseLeftButtonUp" Height="24"/>
+        <Slider x:Name="sliderFontSizeChars" HorizontalAlignment="Left" Margin="438,779,0,0" VerticalAlignment="Top" Width="226" Maximum="50" Value="15" Minimum="1" ValueChanged="SliderFontSizeChars_ValueChanged" SmallChange="1" TickPlacement="BottomRight" IsSnapToTickEnabled="True" Grid.Row="1" Grid.Column="1" PreviewMouseLeftButtonUp="SliderFontSize_PreviewMouseLeftButtonUp" Height="24" Grid.RowSpan="2"/>
+        <Slider x:Name="sliderFontResolutionChars" HorizontalAlignment="Left" Margin="438,32,0,0" VerticalAlignment="Top" Width="226" Minimum="1" Maximum="50" Value="15" SmallChange="1" ValueChanged="SliderFontResolutionChars_ValueChanged" TickPlacement="BottomRight" IsSnapToTickEnabled="True" Grid.Row="2" Grid.Column="1" PreviewMouseLeftButtonUp="SliderFontResolution_PreviewMouseLeftButtonUp" Height="24"/>
 
-        <GroupBox Grid.Column="1" Header="Server connection" HorizontalAlignment="Left" Height="621" Margin="1169.714,31,0,0" Grid.Row="1" VerticalAlignment="Top" Width="356" Visibility="Hidden">
+        <GroupBox Grid.Column="1" Header="Server connection" HorizontalAlignment="Left" Height="621" Margin="1170,31,0,0" Grid.Row="1" VerticalAlignment="Top" Width="356" Visibility="Hidden">
             <ListBox x:Name="listServerCommunication" Height="478" Margin="0,120,-1.286,-0.857" VerticalAlignment="Top" ScrollViewer.HorizontalScrollBarVisibility="Disabled" Visibility="Hidden">
                 <ListBox.ItemContainerStyle>
                     <Style TargetType="ListBoxItem">
@@ -94,9 +94,9 @@
                 </ListBox.ItemTemplate>
             </ListBox>
         </GroupBox>
-        <Button x:Name="btnConnectToServer" Content="Connect" Grid.Column="1" HorizontalAlignment="Left" Margin="1169.714,657,0,0" Grid.Row="1" VerticalAlignment="Top" Width="356" Height="33" BorderBrush="{DynamicResource BlueButton}" Foreground="{DynamicResource BlueButton}" Click="btnConnectToServer_Click" Visibility="Hidden"/>
+        <Button x:Name="btnConnectToServer" Content="Connect" Grid.Column="1" HorizontalAlignment="Left" Margin="1170,657,0,0" Grid.Row="1" VerticalAlignment="Top" Width="356" Height="33" BorderBrush="{DynamicResource BlueButton}" Foreground="{DynamicResource BlueButton}" Click="btnConnectToServer_Click" Visibility="Hidden"/>
 
-        <WindowsFormsHost x:Name="formsHost" HorizontalAlignment="Left" Height="673" VerticalAlignment="Top" Width="913" Margin="197.714,31,0,0" Grid.Row="1" Grid.Column="1" Visibility="Hidden">
+        <WindowsFormsHost x:Name="formsHost" HorizontalAlignment="Left" Height="673" VerticalAlignment="Top" Width="913" Margin="198,31,0,0" Grid.Row="1" Grid.Column="1" Visibility="Hidden">
             <wf3:PictureBox x:Name="pictureBox"/>
         </WindowsFormsHost>
 

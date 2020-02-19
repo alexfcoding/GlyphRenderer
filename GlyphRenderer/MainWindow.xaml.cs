@@ -228,7 +228,7 @@ namespace GlyphRenderer
                 for (int j = 0; j < image.PixelHeight; j += fontResolution)
                 {
                     GlyphRun gr = new GlyphRun(
-                    new GlyphTypeface(new Uri(@"C:\Windows\Fonts\OldEgyptGlyphs.TTF")),
+                    new GlyphTypeface(new Uri(@"C:\Windows\OldEgyptGlyphs.TTF")),
                     0,       
                     false,   
                     fontSize,      
